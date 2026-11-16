@@ -3,6 +3,19 @@
 # ISM2411 - Python for Business
 # Lab 12 - Read a Sales CSV, Write a Cleaned Report
 
+
+# Reflection 1:
+# This exercise reminded me of using Excel to organize sales
+# and calculate totals. Python is better for automating the
+# same task with large datasets, while Excel is easier for
+# quickly viewing and manually editing information.
+
+# Reflection 2:
+# A business could use an append-mode log to keep track of
+# its daily sales reports. Append mode would be useful because
+# it saves every new report without deleting the previous ones.
+
+
 import csv
 
 # Exercise 2 - Read and Print Raw Rows
@@ -112,3 +125,43 @@ print(f"DictReader total revenue: ${dict_total_revenue:.2f}")
 
 # csv.reader is useful for simple files because it accesses columns by position.
 # csv.DictReader is better for business records because it uses column names.
+
+
+
+# Exercise 7 - Sales Summary by Product
+
+# Create an empty dictionary to store revenue by product
+sales_by_product = {}
+
+with open("data/sales.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.DictReader(file)
+
+    for row in reader:
+        product = row["product"]
+        price = float(row["price"])
+        quantity = int(row["quantity"])
+
+        revenue = price * quantity
+
+        # Add revenue to the product's existing total
+        sales_by_product[product] = sales_by_product.get(product, 0) + revenue
+
+# Print the summary in alphabetical order
+for product in sorted(sales_by_product):
+    print(f"{product}: ${sales_by_product[product]:.2f}")
+
+
+
+# Exercise 8 - Append Mode Log
+
+from datetime import datetime
+
+# Get the current date and time
+timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+# Append the date, time, and revenue to the log
+with open("data/run_log.txt", "a", encoding="utf-8") as log_file:
+    log_file.write(f"{timestamp} - Total revenue: ${total_revenue:.2f}\n")
+
+print("Run log updated successfully!")
+
